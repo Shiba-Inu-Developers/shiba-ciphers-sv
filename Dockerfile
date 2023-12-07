@@ -1,4 +1,4 @@
-FROM ultralytics/ultralytics:latest-python
+FROM ultralytics/ultralytics:8.0.223-python
 COPY ./requirements.txt requirements.txt
 RUN pip install --no-cache-dir --upgrade -r requirements.txt
 COPY ./app app
