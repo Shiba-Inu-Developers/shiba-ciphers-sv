@@ -6,7 +6,9 @@ from fastapi import FastAPI, File, Form
 from fastapi.responses import FileResponse
 from PIL import Image
 from ultralytics import YOLO
+import redis
 
+r = redis.Redis(host="redis", decode_responses=False)
 app = FastAPI()
 detection_model = YOLO("app/yolov8n.pt")
 segmentation_model = YOLO("app/yolov8n-seg.pt")
