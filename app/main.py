@@ -35,12 +35,7 @@ def classify(image: bytes = File(...), hash: str = Form(...)):
 
 @app.get("/segment")
 def segment(hash: str):
-    image = r.get(hash)
-
-    if not image:
-        raise HTTPException(
-            status_code=status.HTTP_404_NOT_FOUND, detail="Image not in cache"
-        )
+    image = get_image(hash)
 
     return {
         "areas": [
@@ -48,6 +43,17 @@ def segment(hash: str):
             {"x": 320, "y": 460, "width": 32, "height": 213},
         ]
     }
+
+
+def get_image(hash: str) -> bytes:
+    image = r.get(hash)
+
+    if not image:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND, detail="Image not in cache"
+        )
+
+    return image
 
 
 def use_model(model, file, name) -> FileResponse:
