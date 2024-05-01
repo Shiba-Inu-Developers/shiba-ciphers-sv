@@ -2,7 +2,7 @@ import io
 import os
 import uuid
 
-from fastapi import FastAPI, File, Form
+from fastapi import FastAPI, File, Form, HTTPException, status
 from fastapi.responses import FileResponse
 from PIL import Image
 from ultralytics import YOLO
@@ -31,6 +31,23 @@ def classify(image: bytes = File(...), hash: str = Form(...)):
     image.save(bytes, format=image.format)
     r.set(hash, bytes.getvalue())
     return {"type": "key", "confidence": {"key": 0.8, "cyphertext": 0.1, "other": 0.1}}
+
+
+@app.get("/segment")
+def segment(hash: str):
+    image = r.get(hash)
+
+    if not image:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND, detail="Image not in cache"
+        )
+
+    return {
+        "areas": [
+            {"x": 0, "y": 0, "width": 100, "height": 100},
+            {"x": 320, "y": 460, "width": 32, "height": 213},
+        ]
+    }
 
 
 def use_model(model, file, name) -> FileResponse:
