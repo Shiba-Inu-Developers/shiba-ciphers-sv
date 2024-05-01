@@ -1,10 +1,12 @@
 import io
 import os
+from typing import List
 import uuid
 
 from fastapi import FastAPI, File, Form, HTTPException, status
 from fastapi.responses import FileResponse
 from PIL import Image
+from pydantic import BaseModel
 from ultralytics import YOLO
 import redis
 
@@ -43,6 +45,20 @@ def segment(hash: str):
             {"x": 320, "y": 460, "width": 32, "height": 213},
         ]
     }
+
+
+class Area(BaseModel):
+    x: int
+    y: int
+    width: int
+    height: int
+
+
+@app.get("/extract")
+def extract(hash: str, areas: List[Area]):
+    image = get_image(hash)
+
+    return {"contents": ["Encrypted content #1", "Encrypted content #2"]}
 
 
 def get_image(hash: str) -> bytes:
