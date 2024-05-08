@@ -1,6 +1,6 @@
 import io
 import os
-from typing import List
+from typing import List, Dict
 import uuid
 
 from fastapi import FastAPI, File, Form, HTTPException, status
@@ -26,8 +26,8 @@ def segmentation(file: bytes = File(...), name: str = Form(...)) -> FileResponse
     return use_model(segmentation_model, file, name)
 
 
-@app.post("/classify")
-def classify(image: bytes = File(...), hash: str = Form(...)):
+@app.post("/classify/{hash:str}")
+def classify(hash: str, image: bytes = File(...)):
     bytes = io.BytesIO()
     image = Image.open(io.BytesIO(image))
     image.save(bytes, format=image.format)
@@ -35,8 +35,20 @@ def classify(image: bytes = File(...), hash: str = Form(...)):
     return {"type": "key", "confidence": {"key": 0.8, "cyphertext": 0.1, "other": 0.1}}
 
 
-@app.get("/segment")
-def segment(hash: str):
+@app.get("/segment_key/{hash:str}")
+def segment_key(hash: str):
+    image = get_image(hash)
+
+    return {
+        "areas": [
+            {"x": 0, "y": 0, "width": 100, "height": 100, "type": "basic_key"},
+            {"x": 320, "y": 460, "width": 32, "height": 213, "type": "special_key"},
+        ]
+    }
+
+
+@app.get("/segment_text/{hash:str}")
+def segment_text(hash: str):
     image = get_image(hash)
 
     return {
@@ -54,8 +66,19 @@ class Area(BaseModel):
     height: int
 
 
-@app.get("/extract")
-def extract(hash: str, areas: List[Area]):
+class AreaList(BaseModel):
+    areas: List[Area]
+
+
+@app.get("/extract_key/{hash:str}")
+def extract_key(hash: str, areas: AreaList):
+    image = get_image(hash)
+
+    return {"contents": ["Key content #1", "Key content #2"]}
+
+
+@app.get("/extract_text/{hash:str}")
+def extract_text(hash: str, areas: AreaList):
     image = get_image(hash)
 
     return {"contents": ["Encrypted content #1", "Encrypted content #2"]}
@@ -70,6 +93,16 @@ def get_image(hash: str) -> bytes:
         )
 
     return image
+
+
+class DecryptModel(BaseModel):
+    key: Dict
+    text: Dict
+
+
+@app.post("/decrypt")
+def decrypt(decrypt_request: DecryptModel):
+    return "Decrypted content"
 
 
 def use_model(model, file, name) -> FileResponse:
