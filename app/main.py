@@ -78,14 +78,14 @@ class AreaList(BaseModel):
 async def extract_key(hash: str, areas: AreaList):
     image = get_image(hash)
 
-    return {"contents": ["Key content #1", "Key content #2"]}
+    return {"contents": [f"Key content #{i}" for i, _ in enumerate(areas.areas)]}
 
 
 @app.post("/extract_text/{hash:str}")
 async def extract_text(hash: str, areas: AreaList):
     image = get_image(hash)
 
-    return {"contents": ["Encrypted content #1", "Encrypted content #2"]}
+    return {"contents": [f"Encrypted content #{i}" for i, _ in enumerate(areas.areas)]}
 
 
 def get_image(hash: str) -> bytes:
