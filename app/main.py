@@ -17,17 +17,17 @@ segmentation_model = YOLO("app/yolov8n-seg.pt")
 
 
 @app.post("/detection")
-def detection(file: bytes = File(...), name: str = Form(...)) -> FileResponse:
+async def detection(file: bytes = File(...), name: str = Form(...)) -> FileResponse:
     return use_model(detection_model, file, name)
 
 
 @app.post("/segmentation")
-def segmentation(file: bytes = File(...), name: str = Form(...)) -> FileResponse:
+async def segmentation(file: bytes = File(...), name: str = Form(...)) -> FileResponse:
     return use_model(segmentation_model, file, name)
 
 
 @app.post("/classify/{hash:str}")
-def classify(hash: str, image: bytes = File(...)):
+async def classify(hash: str, image: bytes = File(...)):
     bytes = io.BytesIO()
     image = Image.open(io.BytesIO(image))
     image.save(bytes, format=image.format)
@@ -36,7 +36,7 @@ def classify(hash: str, image: bytes = File(...)):
 
 
 @app.get("/segment_key/{hash:str}")
-def segment_key(hash: str):
+async def segment_key(hash: str):
     image = get_image(hash)
 
     return {
@@ -48,7 +48,7 @@ def segment_key(hash: str):
 
 
 @app.get("/segment_text/{hash:str}")
-def segment_text(hash: str):
+async def segment_text(hash: str):
     image = get_image(hash)
 
     return {
@@ -71,20 +71,20 @@ class AreaList(BaseModel):
 
 
 @app.get("/extract_key/{hash:str}")
-def extract_key(hash: str, areas: AreaList):
+async def extract_key(hash: str, areas: AreaList):
     image = get_image(hash)
 
     return {"contents": ["Key content #1", "Key content #2"]}
 
 
 @app.get("/extract_text/{hash:str}")
-def extract_text(hash: str, areas: AreaList):
+async def extract_text(hash: str, areas: AreaList):
     image = get_image(hash)
 
     return {"contents": ["Encrypted content #1", "Encrypted content #2"]}
 
 
-def get_image(hash: str) -> bytes:
+async def get_image(hash: str) -> bytes:
     image = r.get(hash)
 
     if not image:
@@ -101,7 +101,7 @@ class DecryptModel(BaseModel):
 
 
 @app.post("/decrypt")
-def decrypt(decrypt_request: DecryptModel):
+async def decrypt(decrypt_request: DecryptModel):
     return "Decrypted content"
 
 
