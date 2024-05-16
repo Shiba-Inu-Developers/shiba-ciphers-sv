@@ -32,7 +32,11 @@ async def classify(hash: str, image: bytes = File(...)):
     image = Image.open(io.BytesIO(image))
     image.save(bytes, format=image.format)
     r.set(hash, bytes.getvalue())
-    return {"type": "key", "confidence": {"key": 0.8, "cyphertext": 0.1, "other": 0.1}}
+    return {
+        "hash": hash,
+        "type": "key",
+        "confidence": {"key": 0.8, "cyphertext": 0.1, "other": 0.1},
+    }
 
 
 @app.get("/segment_key/{hash:str}")
