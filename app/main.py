@@ -39,7 +39,7 @@ async def classify(hash: str, image: bytes = File(...)):
     }
 
 
-@app.get("/segment_key/{hash:str}")
+@app.post("/segment_key/{hash:str}")
 async def segment_key(hash: str):
     image = get_image(hash)
 
@@ -51,7 +51,7 @@ async def segment_key(hash: str):
     }
 
 
-@app.get("/segment_text/{hash:str}")
+@app.post("/segment_text/{hash:str}")
 async def segment_text(hash: str):
     image = get_image(hash)
 
@@ -74,14 +74,14 @@ class AreaList(BaseModel):
     areas: List[Area]
 
 
-@app.get("/extract_key/{hash:str}")
+@app.post("/extract_key/{hash:str}")
 async def extract_key(hash: str, areas: AreaList):
     image = get_image(hash)
 
     return {"contents": ["Key content #1", "Key content #2"]}
 
 
-@app.get("/extract_text/{hash:str}")
+@app.post("/extract_text/{hash:str}")
 async def extract_text(hash: str, areas: AreaList):
     image = get_image(hash)
 
