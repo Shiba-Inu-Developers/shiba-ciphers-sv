@@ -68,6 +68,7 @@ class Area(BaseModel):
     y: int
     width: int
     height: int
+    type: str | None
 
 
 class AreaList(BaseModel):
