@@ -88,7 +88,7 @@ async def extract_text(hash: str, areas: AreaList):
     return {"contents": ["Encrypted content #1", "Encrypted content #2"]}
 
 
-async def get_image(hash: str) -> bytes:
+def get_image(hash: str) -> bytes:
     image = r.get(hash)
 
     if not image:
