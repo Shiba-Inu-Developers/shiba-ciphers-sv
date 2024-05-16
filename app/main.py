@@ -78,7 +78,7 @@ class AreaList(BaseModel):
 async def extract_key(hash: str, areas: AreaList):
     image = get_image(hash)
 
-    return {"contents": [f"Key content #{i}" for i, _ in enumerate(areas.areas)]}
+    return {"contents": [{"a": "b"} for _ in areas.areas]}
 
 
 @app.post("/extract_text/{hash:str}")
