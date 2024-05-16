@@ -1,14 +1,14 @@
 import io
 import os
-from typing import List, Dict
 import uuid
+from typing import Dict, List
 
+import redis
 from fastapi import FastAPI, File, Form, HTTPException, status
 from fastapi.responses import FileResponse
 from PIL import Image
 from pydantic import BaseModel
 from ultralytics import YOLO
-import redis
 
 r = redis.Redis(host="redis", decode_responses=False)
 app = FastAPI()
