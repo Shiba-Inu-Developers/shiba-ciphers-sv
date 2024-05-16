@@ -101,7 +101,7 @@ def get_image(hash: str) -> bytes:
 
 class DecryptModel(BaseModel):
     key: Dict
-    text: Dict
+    text: str
 
 
 @app.post("/decrypt")
