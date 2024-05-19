@@ -77,6 +77,61 @@ class AreaList(BaseModel):
 
 @app.post("/extract_key/{hash:str}")
 async def extract_key(hash: str, areas: AreaList):
+    if hash == "c7dc145c139b1892447f146168149a039036ad21b1ee586d3cb63507b8bf37a4":
+        return {
+            "contents": [
+                {
+                    "a": "n",
+                    "b": "_n",
+                    "c": "~n",
+                    "d": "n.",
+                    "e": "n+",
+                    "f": "a_n",
+                    "g": "i_n",
+                    "h": "o_n",
+                    "i": "e_n",
+                    "j": "a_p",
+                    "k": "e_p",
+                    "l": "o_p",
+                    "m": "u_p",
+                    "n": "i_p",
+                    "o": "a_p-",
+                    "p": "e_p-",
+                    "q": "i_p-",
+                    "r": "o_p-",
+                    "s": "u_p-",
+                    "t": "S",
+                    "u": "G",
+                    "v": "D",
+                    "w": "X",
+                },
+                {
+                    "bb": "a",
+                    "cc": "a",
+                    "dd": "a_",
+                    "ff": "a.",
+                    "gg": "a..",
+                    "ll": "~a",
+                    "mm": "_a",
+                    "m": "a,",
+                    "pp": "a_d",
+                    "xx": "a_e",
+                    "tt": "a_i",
+                },
+                {
+                    "ff": "\x00",
+                    "--d": "\x00",
+                    "q--": "\x00",
+                    "_q": "\x00",
+                    "q3": "\x00",
+                    "&": "\x00",
+                    "g": "\x00",
+                    ">": "\x00",
+                    "3": "\x00",
+                },
+            ]
+        }
+
     image = get_image(hash)
 
     return {"contents": [{"a": "b"} for _ in areas.areas]}
